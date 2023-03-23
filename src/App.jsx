@@ -1,21 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 
 const App = () => {
 
   const [element1, setElement1] = useState(false);
   const [element2, setElement2] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   const handleClick = () => {
     setElement1(!element1);
     setElement2(!element2);
   };
 
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   return (
     <div className="container">
       <header>
         <h1>My Website</h1>
-        {window.innerWidth < 500 ? (
+        {windowWidth < 500 ? (
           <div className={`menu_hamburguesa ${element1 ? 'active' : ''}`} onClick={handleClick}>
             <span></span>
             <span></span>
@@ -38,7 +49,6 @@ const App = () => {
             </li>
           </ul>
         </nav>
-        
       </header>
       <main>
         <section>
